@@ -4,27 +4,27 @@ options:
 pipelines:
   default:
       - step:
-        caches:
-          - pip
-        script:
-          # Set $AWS_DKR_REGISTRY $AWS_ACCESS_KEY_ID and $AWS_SECRET_ACCESS_KEY and AWS_DEFAULT_REGION as environment variables in repository settings
-          - export IMAGE_NAME=$AWS_DKR_REGISTRY/alpine-aws-cli
-          # Get AWS CLI to be able to login to ECR
-          - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-          - unzip awscli-bundle.zip
-          - ./awscli-bundle/install -b ~/bin/aws
-          - export PATH=~/bin:$PATH
-          # Add the Docker auth for ECR push
-          - $(aws ecr get-login --region us-east-1 --no-include-email)
-          # build the Docker image (this will use the Dockerfile in the root of the repo)
-          - docker build -t $IMAGE_NAME:latest .
-          # push the new Docker image to the Docker registry
-          - docker push $IMAGE_NAME:latest
-          # Create tags for branch, git_commit and tag if set
-          - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$BITBUCKET_BRANCH
-          - docker push $IMAGE_NAME:$BITBUCKET_BRANCH
-          - docker tag $IMAGE_NAME:latest $IMAGE_NAME:git_${BITBUCKET_COMMIT:0:7}
-          - docker push $IMAGE_NAME:git_${BITBUCKET_COMMIT:0:7}
+          caches:
+            - pip
+          script:
+            # Set $AWS_DKR_REGISTRY $AWS_ACCESS_KEY_ID and $AWS_SECRET_ACCESS_KEY and AWS_DEFAULT_REGION as environment variables in repository settings
+            - export IMAGE_NAME=$AWS_DKR_REGISTRY/alpine-aws-cli
+            # Get AWS CLI to be able to login to ECR
+            - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+            - unzip awscli-bundle.zip
+            - ./awscli-bundle/install -b ~/bin/aws
+            - export PATH=~/bin:$PATH
+            # Add the Docker auth for ECR push
+            - $(aws ecr get-login --region us-east-1 --no-include-email)
+            # build the Docker image (this will use the Dockerfile in the root of the repo)
+            - docker build -t $IMAGE_NAME:latest .
+            # push the new Docker image to the Docker registry
+            - docker push $IMAGE_NAME:latest
+            # Create tags for branch, git_commit and tag if set
+            - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$BITBUCKET_BRANCH
+            - docker push $IMAGE_NAME:$BITBUCKET_BRANCH
+            - docker tag $IMAGE_NAME:latest $IMAGE_NAME:git_${BITBUCKET_COMMIT:0:7}
+            - docker push $IMAGE_NAME:git_${BITBUCKET_COMMIT:0:7}
   tags:
     v*:
       - step:
