@@ -3,7 +3,9 @@ options:
 
 pipelines:
   default:
-    - step:
+      - step:
+        caches:
+          - pip
         script:
           # Set $AWS_DKR_REGISTRY $AWS_ACCESS_KEY_ID and $AWS_SECRET_ACCESS_KEY and AWS_DEFAULT_REGION as environment variables in repository settings
           - export IMAGE_NAME=$AWS_DKR_REGISTRY/alpine-aws-cli
@@ -24,7 +26,7 @@ pipelines:
           - docker tag $IMAGE_NAME:latest $IMAGE_NAME:git_${BITBUCKET_COMMIT:0:7}
           - docker push $IMAGE_NAME:git_${BITBUCKET_COMMIT:0:7}
   tags:
-    v-*:
+    v*:
       - step:
           script:
             # Set $AWS_DKR_REGISTRY $AWS_ACCESS_KEY_ID and $AWS_SECRET_ACCESS_KEY and AWS_DEFAULT_REGION as environment variables in repository settings
