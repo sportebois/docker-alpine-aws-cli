@@ -20,3 +20,21 @@ pipelines:
           # push the new Docker image to the Docker registry
           - docker push $IMAGE_NAME:latest
           - docker push $IMAGE_NAME:$TAG
+  custom: # Add manual build for try & debug the pipeline
+    - step:
+        script:
+          # Set $AWS_ACCESS_KEY_ID and $AWS_SECRET_ACCESS_KEY and AWS_DEFAULT_REGION as environment variables in repository settings
+          - export TAG=1.11
+          - export IMAGE_NAME=809113430512.dkr.ecr.us-east-1.amazonaws.com/alpine-aws-cli
+          # Get AWS CLI to be able to login to ECR
+          - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+          - unzip awscli-bundle.zip
+          - ./awscli-bundle/install -b ~/bin/aws
+          - export PATH=~/bin:$PATH
+          # Add the Docker authn for ECR push
+          - $(aws ecr get-login --region us-east-1)
+          # build the Docker image (this will use the Dockerfile in the root of the repo)
+          - docker build -t $IMAGE_NAME:latest .
+          # push the new Docker image to the Docker registry
+          - docker push $IMAGE_NAME:latest
+          - docker push $IMAGE_NAME:$TAG
