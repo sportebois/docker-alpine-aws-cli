@@ -8,6 +8,7 @@ RUN apk --update --no-cache add \
     py-pip \
     jq \
     bash \
+    git \
     && pip install --no-cache-dir awscli==$AWS_CLI_VERSION \
     && apk del py-pip \
     && rm -rf /var/cache/apk/* /root/.cache/pip/* /usr/lib/python2.7/site-packages/awscli/examples
