@@ -1,7 +1,7 @@
 # Alpine 3.7 is current latest
 FROM alpine:3.7
 
-ENV AWS_CLI_VERSION=1.14.35
+ENV AWS_CLI_VERSION=1.15.40
 
 RUN apk --update --no-cache add \
     python \
