@@ -1,5 +1,5 @@
-# Alpine 3.6 is current latest
-FROM alpine:3.6
+# Alpine 3.7 is current latest
+FROM alpine:3.7
 
 ENV AWS_CLI_VERSION=1.14.35
 
