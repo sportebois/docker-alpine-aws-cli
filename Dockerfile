@@ -19,5 +19,3 @@ VOLUME /root/.aws
 # Expose workspace to mount stuff
 VOLUME /workspace
 WORKDIR /workspace
-
-ENTRYPOINT [ "aws" ]
